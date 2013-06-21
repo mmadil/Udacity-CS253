@@ -73,15 +73,15 @@ def escape_html(string):
 
 
 navigations = ['<a href="/">Home (Unit 1)</a>', '<a href="/unit2/forms">Forms (Unit 2)</a>',
-        '<a href="/unit2/rot13">ROT13 (Unit 2)</a>']
+        '<a href="/unit2/rot13">ROT13 (Unit 2)</a>', '<a href="/unit2/login">Login</a>']
 
 
 def navbar():
     string = ''
     for e in navigations:
         string += e
-        string += '<br>'
-    return string
+        string += '|'
+    return string+'<br>'
 
 
 class Lesson1Handler(webapp2.RequestHandler):
@@ -154,10 +154,39 @@ class ROT13Handler(webapp2.RequestHandler):
         self.write_html(string.encode('rot13'))
 
 
+
+login_form = """
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+    <form method="POST">
+        <label>Name<input type="text" name="name"></label><br>
+        <label>Password<input type="password" name="password1"></label><br>
+        <label>Verify Password<input type="password" name="password2"></label><br>
+        <label>Email (optional) <input type="email" name="email"></label><br>
+        <input type="submit">
+    </form>
+</body>
+</html>
+"""
+
+class SignUpHandler(webapp2.RequestHandler):
+    def write_loginform(self):
+        self.response.out.write(login_form)
+
+    def get(self):
+        self.write_loginform()
+
+    def post(self):
+        pass
+
 app = webapp2.WSGIApplication([
     ('/', Lesson1Handler),
     ('/unit2/forms', Lesson2Handler),
     ('/unit2/thanks', ThanksHandler),
-    ('/unit2/rot13', ROT13Handler)
+    ('/unit2/rot13', ROT13Handler),
+    ('/unit2/login', SignUpHandler),
 ], debug=True)
 
